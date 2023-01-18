@@ -4,9 +4,9 @@
 
 
 //为了使用 ZJY的Application.h
-#include "ZJY/Application.h"
-#include"ZJY/Log.h"
+#include "ZJY/Core/Application.h"
+#include"ZJY/Core/Log.h"
 
 //------------------Entry Point----------
-#include"ZJY/EntryPoint.h"
+#include"ZJY/Core/EntryPoint.h"
 //---------------------------------------

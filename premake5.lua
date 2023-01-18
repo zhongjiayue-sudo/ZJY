@@ -10,6 +10,13 @@ workspace "ZJY"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{}cfg.architecture" 
 
+-- Include directories relative to root folder (solution directory)
+IncludeDir = {}
+IncludeDir["GLFW"] = "ZJY/vendor/GLFW/include"
+
+include "ZJY/vendor/GLFW"
+
+
 project "ZJY"
 	location "ZJY"
 	kind "SharedLib"
@@ -17,6 +24,9 @@ project "ZJY"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	pchheader "hzpch.h"
+	pchsource "ZJY/src/hzpch.cpp"
 
 	files
 	{
@@ -26,7 +36,15 @@ project "ZJY"
 
 	includedirs
 	{
-		"%{prj.name}/vendor/spdlog/include"
+		"%{prj.name}/src",
+		"%{prj.name}/vendor/spdlog/include",
+		"%{IncludeDir.GLFW}"
+	}
+
+	links
+	{
+		"GLFW",
+		"opengl32.lib"
 	}
 
 	filter "system:windows"
@@ -46,15 +64,18 @@ project "ZJY"
 		}
 
 		filter "configurations:Debug"
-			defines "HZ_DEUBG"
+			defines "HZ_DEBUG"
+			buildoptions "/MDd"
 			symbols "On"
 
 		filter "configurations:Release"
-			defines "HZ_Release"
+			defines "HZ_RELEASE"
+			buildoptions "/MD"
 			optimize "On"
 
 		filter "configurations:Dist"
-			defines "HZ_Dist"
+			defines "HZ_DIST"
+			buildoptions "/MD"
 			optimize "On"
 
 project "Sandbox"
@@ -93,13 +114,16 @@ project "Sandbox"
 		}
 
 		filter "configurations:Debug"
-			defines "HZ_DEUBG"
+			defines "HZ_DEBUG"
+			buildoptions "/MDd"
 			symbols "On"
 
 		filter "configurations:Release"
-			defines "HZ_Release"
+			defines "HZ_RELEASE"
+			buildoptions "/MD"
 			optimize "On"
 
 		filter "configurations:Dist"
-			defines "HZ_Dist"
+			defines "HZ_DIST"
+			buildoptions "/MD"
 			optimize "On"

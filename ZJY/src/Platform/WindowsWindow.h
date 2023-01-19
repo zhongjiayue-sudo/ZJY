@@ -1,6 +1,5 @@
 #pragma once
 #include"ZJY/Window.h"
-
 #include<GLFW/glfw3.h>
 
 namespace ZJY 

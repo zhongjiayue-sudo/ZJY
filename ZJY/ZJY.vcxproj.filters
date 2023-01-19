@@ -13,6 +13,9 @@
     <Filter Include="ZJY\Events">
       <UniqueIdentifier>{463DB63B-32F5-F788-9BFC-D0E487D39279}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ZJY\ImGui">
+      <UniqueIdentifier>{4C62EB66-B8CC-9FDD-010B-51836DB47D32}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Platform\WindowsWindow.h">
@@ -29,6 +32,12 @@
       <Filter>ZJY\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\ZJY\Core\KeyCodes.h">
+      <Filter>ZJY\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ZJY\Core\Layer.h">
+      <Filter>ZJY\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ZJY\Core\LayerStack.h">
       <Filter>ZJY\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\ZJY\Core\Log.h">
@@ -49,10 +58,15 @@
     <ClInclude Include="src\ZJY\Events\MouseEvent.h">
       <Filter>ZJY\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\ZJY\ImGui\ImGuiLayer.h">
+      <Filter>ZJY\ImGui</Filter>
+    </ClInclude>
     <ClInclude Include="src\ZJY\Window.h">
       <Filter>ZJY</Filter>
     </ClInclude>
     <ClInclude Include="src\hzpch.h" />
+    <ClInclude Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.h" />
+    <ClInclude Include="src\Platform\OpenGL\imgui_impl_opengl3_loader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\WindowsWindow.cpp">
@@ -61,9 +75,19 @@
     <ClCompile Include="src\ZJY\Core\Application.cpp">
       <Filter>ZJY\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\ZJY\Core\Layer.cpp">
+      <Filter>ZJY\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ZJY\Core\LayerStack.cpp">
+      <Filter>ZJY\Core</Filter>
+    </ClCompile>
     <ClCompile Include="src\ZJY\Core\Log.cpp">
       <Filter>ZJY\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\ZJY\ImGui\ImGuiLayer.cpp">
+      <Filter>ZJY\ImGui</Filter>
+    </ClCompile>
     <ClCompile Include="src\hzpch.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.cpp" />
   </ItemGroup>
 </Project>

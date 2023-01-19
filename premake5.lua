@@ -13,8 +13,12 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{}cfg.architecture"
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
 IncludeDir["GLFW"] = "ZJY/vendor/GLFW/include"
+IncludeDir["Glad"] = "ZJY/vendor/Glad/include"
+IncludeDir["ImGui"] = "ZJY/vendor/imgui"
 
 include "ZJY/vendor/GLFW"
+include "ZJY/vendor/Glad"
+include "ZJY/vendor/imgui"
 
 
 project "ZJY"
@@ -38,12 +42,16 @@ project "ZJY"
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.ImGui}"
 	}
 
 	links
 	{
 		"GLFW",
+		"Glad",
+		"ImGui",
 		"opengl32.lib"
 	}
 
@@ -55,7 +63,8 @@ project "ZJY"
 		defines
 		{
 			"Z_BUILD_DLL",
-			"Z_PLATFORM_WINDOWS"
+			"Z_PLATFORM_WINDOWS",
+			"GLFW_INCLUDE_NONE"
 		}
 
 		postbuildcommands

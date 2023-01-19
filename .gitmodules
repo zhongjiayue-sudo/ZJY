@@ -4,3 +4,6 @@
 [submodule "ZJY/vendor/GLFW"]
 	path = ZJY/vendor/GLFW
 	url = https://github.com/TheCherno/GLFW
+[submodule "ZJY/vendor/imgui"]
+	path = ZJY/vendor/imgui
+	url = https://github.com/TheCherno/imgui

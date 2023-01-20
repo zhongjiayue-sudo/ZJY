@@ -71,6 +71,8 @@
       <Filter>ZJY</Filter>
     </ClInclude>
     <ClInclude Include="src\hzpch.h" />
+    <ClInclude Include="src\ZJY\Core\Input.h" />
+    <ClInclude Include="src\Platform\WindowsInput.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.cpp">
@@ -95,5 +97,6 @@
       <Filter>ZJY\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\hzpch.cpp" />
+    <ClCompile Include="src\Platform\WindowsInput.cpp" />
   </ItemGroup>
 </Project>

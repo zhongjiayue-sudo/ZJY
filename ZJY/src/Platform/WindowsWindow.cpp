@@ -19,7 +19,7 @@ namespace ZJY
 		return new WindowsWindow(props);
 	}
 	WindowsWindow::WindowsWindow(const WindowProps& props)
-	{
+	{ 
 		Init(props);
 	}
 	WindowsWindow::~WindowsWindow()

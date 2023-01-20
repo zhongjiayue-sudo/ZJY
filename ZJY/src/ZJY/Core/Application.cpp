@@ -4,6 +4,8 @@
 //#include "GLFW/glfw3.h"//glad里包括这个
 #include<Glad/glad.h>
 
+#include"ZJY/Core/Input.h"
+
 namespace ZJY {
 
 #define BIND_EVENT_FN(x) std::bind(&x,this,std::placeholders::_1)
@@ -49,6 +51,9 @@ namespace ZJY {
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
+
+			auto [x, y] = Input::GetMousePossition();
+			Z_CORE_TRACE("{0},{1}", x, y);
 
 			m_Window->OnUpdate();
 		}

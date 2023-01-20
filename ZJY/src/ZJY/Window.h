@@ -25,7 +25,7 @@ namespace ZJY {
 	public:
 		using EventCallbackFn = std::function<void(Event&)>;
 
-		virtual ~Window();
+		virtual ~Window() {}
 
 		virtual void OnUpdate() = 0;
 		virtual unsigned int GetWidth() const = 0;

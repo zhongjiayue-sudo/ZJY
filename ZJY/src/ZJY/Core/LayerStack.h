@@ -27,6 +27,6 @@ namespace ZJY {
 
 	private:
 		std::vector<Layer*> m_Layers;//ÆÕÍ¨Ö¸Õë
-		std::vector<Layer*>::iterator m_LayerInsert;
+		unsigned int m_LayerInsertIndex = 0;//Ë÷Òı
 	};
 }

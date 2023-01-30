@@ -1,11 +1,15 @@
 #pragma once
 
 #ifdef Z_PLATFORM_WINDOWS
+#if HZ_DYNAMIC_LINK
 	#ifdef Z_BUILD_DLL
 		#define ZJY_API __declspec(dllexport)
 	#else
 		#define ZJY_API __declspec(dllimport)
 	#endif // Z_BUILD_DLL
+#else
+	#define ZJY_API
+#endif
 #else
 	#error ZJY only support Windows;
 #endif // Z_PLATFORM_WINDOWS

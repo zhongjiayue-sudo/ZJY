@@ -1,6 +1,5 @@
 #pragma once
 
-
 namespace ZJY
 {
 	using KeyCode = uint16_t;

@@ -1,6 +1,9 @@
 #pragma once
 #include"ZJY/Window.h"
+
 #include<GLFW/glfw3.h>
+
+#include <ZJY/Renderer/GraphicsContext.h>
 
 namespace ZJY 
 {
@@ -25,6 +28,8 @@ namespace ZJY
 		virtual void Shutdown();
 	private:
 		GLFWwindow* m_Window;
+
+		GraphicsContext* m_Context;
 
 		struct WindowData {
 			std::string Title;

@@ -8,6 +8,10 @@
 #include "ZJY/Core/Layer.h"
 #include "ZJY/Core/Log.h"
 
+#include "ZJY/Core/Input.h"
+#include "ZJY/Core/KeyCodes.h"
+#include "ZJY/Core/MouseCodes.h"
+
 #include "ZJY/ImGui/ImGuiLayer.h"
 
 //------------------Entry Point----------

@@ -7,3 +7,6 @@
 [submodule "ZJY/vendor/imgui"]
 	path = ZJY/vendor/imgui
 	url = https://github.com/TheCherno/imgui
+[submodule "ZJY/vendor/glm"]
+	path = ZJY/vendor/glm
+	url = https://github.com/g-truc/glm

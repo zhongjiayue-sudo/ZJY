@@ -1,5 +1,6 @@
 workspace "ZJY"
 	architecture "x64"
+	startproject "Sandbox"
 
 	configurations
 	{
@@ -10,11 +11,12 @@ workspace "ZJY"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{}cfg.architecture" 
 
--- Include directories relative to root folder (solution directory)
+-- Include directories relative to root folder (solution directory)添加外部头文件的时候，要修改参数
 IncludeDir = {}
 IncludeDir["GLFW"] = "ZJY/vendor/GLFW/include"
 IncludeDir["Glad"] = "ZJY/vendor/Glad/include"
 IncludeDir["ImGui"] = "ZJY/vendor/imgui"
+IncludeDir["glm"] = "ZJY/vendor/glm"
 
 include "ZJY/vendor/GLFW"
 include "ZJY/vendor/Glad"
@@ -23,8 +25,10 @@ include "ZJY/vendor/imgui"
 
 project "ZJY"
 	location "ZJY"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -35,7 +39,14 @@ project "ZJY"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/glm/glm/**.hpp",
+		"%{prj.name}/vendor/glm/glm/**.inl"
+	}
+
+	defines
+	{
+		"_CRT_SECURE_NO_WARNINGS"
 	}
 
 	includedirs
@@ -44,7 +55,8 @@ project "ZJY"
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
-		"%{IncludeDir.ImGui}"
+		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.glm}"
 	}
 
 	links
@@ -56,8 +68,6 @@ project "ZJY"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines
@@ -65,32 +75,33 @@ project "ZJY"
 			"Z_BUILD_DLL",
 			"Z_PLATFORM_WINDOWS",
 			"GLFW_INCLUDE_NONE"
-		}
 
-		postbuildcommands
-		{
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
 		}
 
 		filter "configurations:Debug"
 			defines "HZ_DEBUG"
-			buildoptions "/MDd"
-			symbols "On"
+			runtime "Debug"
+			--buildoptions "/Mtd"
+			symbols "on"
 
 		filter "configurations:Release"
 			defines "HZ_RELEASE"
-			buildoptions "/MD"
-			optimize "On"
+			runtime "Release"
+			--buildoptions "/MD"
+			optimize "on"
 
 		filter "configurations:Dist"
 			defines "HZ_DIST"
-			buildoptions "/MD"
-			optimize "On"
+			runtime "Release"
+			--buildoptions "/MD"
+			optimize "on"
 
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
+	cppdialect "C++17"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -98,13 +109,17 @@ project "Sandbox"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/glm/glm/**.hpp",
+		"%{prj.name}/vendor/glm/glm/**.inl"
 	}
 
 	includedirs
 	{
 		"ZJY/vendor/spdlog/include",
-		"ZJY/src"
+		"ZJY/src",
+		"ZJY/vendor",
+		"%{IncludeDir.glm}"
 	}
 
 	links
@@ -113,8 +128,6 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines
@@ -124,15 +137,18 @@ project "Sandbox"
 
 		filter "configurations:Debug"
 			defines "HZ_DEBUG"
-			buildoptions "/MDd"
-			symbols "On"
+			runtime "Debug"
+			--buildoptions "/Mtd"
+			symbols "on"
 
 		filter "configurations:Release"
 			defines "HZ_RELEASE"
-			buildoptions "/MD"
-			optimize "On"
+			runtime "Release"
+			--buildoptions "/MD"
+			optimize "on"
 
 		filter "configurations:Dist"
 			defines "HZ_DIST"
-			buildoptions "/MD"
-			optimize "On"
+			runtime "Release"
+			--buildoptions "/MD"
+			optimize "on"

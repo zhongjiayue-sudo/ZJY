@@ -1353,6 +1353,12 @@
     <ClInclude Include="src\ZJY\Renderer\Buffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\ZJY\Renderer\Renderer.h" />
+    <ClInclude Include="src\ZJY\Renderer\VertexArray.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h" />
+    <ClInclude Include="src\ZJY\Renderer\RendererAPI.h" />
+    <ClInclude Include="src\ZJY\Renderer\RenderCommand.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLRenderderAPI.h" />
+    <ClInclude Include="src\ZJY\Renderer\OrthographicCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\WindowsInput.cpp">
@@ -1387,5 +1393,11 @@
     <ClCompile Include="src\ZJY\Renderer\Buffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\ZJY\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\ZJY\Renderer\VertexArray.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp" />
+    <ClCompile Include="src\ZJY\Renderer\RendererAPI.cpp" />
+    <ClCompile Include="src\ZJY\Renderer\RenderCommand.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLRenderderAPI.cpp" />
+    <ClCompile Include="src\ZJY\Renderer\OrthographicCamera.cpp" />
   </ItemGroup>
 </Project>

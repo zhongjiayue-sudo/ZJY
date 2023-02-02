@@ -25,4 +25,4 @@
 
 #define BIT(x) (1<<x)//定义位字段
 
-#define Z_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+#define Z_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)//事件绑定

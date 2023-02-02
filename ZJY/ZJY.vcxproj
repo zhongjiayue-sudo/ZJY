@@ -142,6 +142,8 @@
   <ItemGroup>
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLRenderderAPI.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\Platform\WindowsInput.h" />
     <ClInclude Include="src\Platform\WindowsWindow.h" />
     <ClInclude Include="src\ZJY.h" />
@@ -161,8 +163,12 @@
     <ClInclude Include="src\ZJY\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\ZJY\Renderer\Buffer.h" />
     <ClInclude Include="src\ZJY\Renderer\GraphicsContext.h" />
+    <ClInclude Include="src\ZJY\Renderer\OrthographicCamera.h" />
     <ClInclude Include="src\ZJY\Renderer\Renderer.h" />
+    <ClInclude Include="src\ZJY\Renderer\RendererAPI.h" />
+    <ClInclude Include="src\ZJY\Renderer\RenderCommand.h" />
     <ClInclude Include="src\ZJY\Renderer\Shader.h" />
+    <ClInclude Include="src\ZJY\Renderer\VertexArray.h" />
     <ClInclude Include="src\ZJY\Window.h" />
     <ClInclude Include="src\hzpch.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
@@ -585,6 +591,8 @@
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLRenderderAPI.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\Platform\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\WindowsWindow.cpp" />
     <ClCompile Include="src\ZJY\Core\Application.cpp" />
@@ -597,8 +605,12 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\ZJY\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\ZJY\Renderer\OrthographicCamera.cpp" />
+    <ClCompile Include="src\ZJY\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\ZJY\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\ZJY\Renderer\RendererAPI.cpp" />
     <ClCompile Include="src\ZJY\Renderer\Shader.cpp" />
+    <ClCompile Include="src\ZJY\Renderer\VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLFW\GLFW.vcxproj">

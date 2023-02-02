@@ -14,6 +14,18 @@
 
 #include "ZJY/ImGui/ImGuiLayer.h"
 
+//------------------Renderer-------------
+#include"ZJY/Renderer/Renderer.h"
+#include"ZJY/Renderer/RenderCommand.h"
+
+#include"ZJY/Renderer/Buffer.h"
+#include"ZJY/Renderer/Shader.h"
+#include"ZJY/Renderer/VertexArray.h"
+
+#include"ZJY/Renderer/OrthographicCamera.h"
+
+//---------------------------------------
+
 //------------------Entry Point----------
 #include "ZJY/Core/EntryPoint.h"
 //---------------------------------------

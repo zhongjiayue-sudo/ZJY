@@ -6,6 +6,8 @@
 
 #include"ZJY/Core/Input.h"
 
+#include"GLFW/glfw3.h"
+
 
 namespace ZJY {
 
@@ -20,6 +22,7 @@ namespace ZJY {
 
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallBack(BIND_EVENT_FN(Application::OnEvent));
+		//m_Window->SetVSync(false);//不限制60fps
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);//新加窗口，放入栈中
@@ -50,9 +53,13 @@ namespace ZJY {
 	void Application::Run() {
 		while (m_Running) 
 		{
+			float time = (float)glfwGetTime();
+			Timestep timestep = time - m_LastframeTime;
+			m_LastframeTime = time;
+
 			//图层更新
 			for (Layer* layer : m_LayerStack)
-				layer->OnUpdate();
+				layer->OnUpdate(timestep);
 
 			m_ImGuiLayer->Begin();
 			for (Layer* layer : m_LayerStack)

@@ -2,6 +2,7 @@
 
 #include "ZJY/Core.h"
 #include "ZJY/Events/Event.h"
+#include"ZJY/Core/Timestep.h"
 
 namespace ZJY {
 	class ZJY_API Layer
@@ -12,7 +13,7 @@ namespace ZJY {
 
 		virtual void OnAttach(){}
 		virtual void OnDetach(){}
-		virtual void OnUpdate(){}
+		virtual void OnUpdate(Timestep ts){}
 
 		virtual void OnImGuiRender(){}
 		virtual void OnEvent(Event& event){}

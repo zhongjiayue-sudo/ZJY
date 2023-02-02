@@ -156,6 +156,7 @@
     <ClInclude Include="src\ZJY\Core\LayerStack.h" />
     <ClInclude Include="src\ZJY\Core\Log.h" />
     <ClInclude Include="src\ZJY\Core\MouseCodes.h" />
+    <ClInclude Include="src\ZJY\Core\Timestep.h" />
     <ClInclude Include="src\ZJY\Events\ApplicationEvent.h" />
     <ClInclude Include="src\ZJY\Events\Event.h" />
     <ClInclude Include="src\ZJY\Events\KeyEvent.h" />

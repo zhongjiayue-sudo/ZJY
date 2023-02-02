@@ -1359,6 +1359,7 @@
     <ClInclude Include="src\ZJY\Renderer\RenderCommand.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLRenderderAPI.h" />
     <ClInclude Include="src\ZJY\Renderer\OrthographicCamera.h" />
+    <ClInclude Include="src\ZJY\Core\Timestep.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\WindowsInput.cpp">

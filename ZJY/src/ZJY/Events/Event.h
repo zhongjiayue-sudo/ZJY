@@ -1,5 +1,7 @@
 #pragma once
+
 #include"hzpch.h"
+#include<string>
 
 #include"ZJY/Core.h"
 

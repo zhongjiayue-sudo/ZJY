@@ -24,6 +24,9 @@ namespace ZJY {
 		m_Window->SetEventCallBack(BIND_EVENT_FN(Application::OnEvent));
 		//m_Window->SetVSync(false);//不限制60fps
 
+		//创建渲染器
+		Renderer::Init();
+
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);//新加窗口，放入栈中
 	}
@@ -53,6 +56,7 @@ namespace ZJY {
 	void Application::Run() {
 		while (m_Running) 
 		{
+			//设置delta time
 			float time = (float)glfwGetTime();
 			Timestep timestep = time - m_LastframeTime;
 			m_LastframeTime = time;

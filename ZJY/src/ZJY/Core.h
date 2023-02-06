@@ -1,5 +1,7 @@
 #pragma once
 
+#include<memory>
+
 #ifdef Z_PLATFORM_WINDOWS
 #if HZ_DYNAMIC_LINK
 	#ifdef Z_BUILD_DLL
@@ -26,3 +28,14 @@
 #define BIT(x) (1<<x)//定义位字段
 
 #define Z_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)//事件绑定
+
+namespace ZJY
+{
+	//未来会被asset manager所管理的资源才用重命名的sharede-ptr
+	template<typename T>
+	using Scope = std::unique_ptr<T>;
+
+	template<typename T>
+	using Ref = std::shared_ptr<T>;
+
+}

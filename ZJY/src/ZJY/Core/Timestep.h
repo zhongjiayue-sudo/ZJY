@@ -10,7 +10,6 @@ namespace ZJY
 		{
 
 		}
-
 		operator float() const { return m_Time; }//用Timestep类型的数据时之间使用的时m_Time;
 
 		float GetSecond()const { return m_Time; }

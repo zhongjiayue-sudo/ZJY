@@ -1,6 +1,11 @@
 #include<ZJY.h>
+#include"Platform/OpenGL/OpenGLShader.h"
 
 #include"imgui/imgui.h"
+
+#include"glm/gtc/matrix_transform.hpp"
+
+#include"glm/gtc/type_ptr.hpp"
 
 class ExampleLayer : public ZJY::Layer
 {
@@ -21,7 +26,7 @@ public:
 			 0.0f ,  0.5f , 0.0f , 1.0f , 1.0f , 0.0f , 1.0f
 		};
 
-		std::shared_ptr<ZJY::VertexBuffer> m_VertexBuffer;
+		ZJY::Ref<ZJY::VertexBuffer> m_VertexBuffer;
 		m_VertexBuffer.reset(ZJY::VertexBuffer::Creat(vertives, sizeof(vertives)));
 		ZJY::BufferLayout layout = {
 			{ZJY::ShaderDataType::Float3,"a_Position"},
@@ -37,7 +42,7 @@ public:
 
 		//索引缓冲区也就是元素缓冲区,索引就是点的连接顺序等
 		unsigned int indices[3] = { 0,1,2 };
-		std::shared_ptr<ZJY::IndexBuffer> m_IndexBuffer;
+		ZJY::Ref<ZJY::IndexBuffer> m_IndexBuffer;
 		m_IndexBuffer.reset(ZJY::IndexBuffer::Creat(indices, sizeof(indices) / sizeof(uint32_t)));//sizeof(indices) / sizeof(uint32_t)=3
 		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
@@ -55,22 +60,24 @@ public:
 
 		m_SquareVA.reset(ZJY::VertexArray::Creat());
 
-		float squarevertives[3 * 4] = {
-			-0.75f , -0.75f , 0.0f ,
-			 0.75f , -0.75f , 0.0f ,
-			 0.75f ,  0.75f , 0.0f ,
-			-0.75f ,  0.75f , 0.0f
+		float squarevertives[5 * 4] = {
+	//     ---- 位置 ----        - 纹理坐标 -
+			-0.5f , -0.5f , 0.0f , 0.0f, 0.0f,
+			 0.5f , -0.5f , 0.0f , 1.0f, 0.0f,
+			 0.5f ,  0.5f , 0.0f , 1.0f, 1.0f,
+			-0.5f ,  0.5f , 0.0f , 0.0f, 1.0f
 		};
 
-		std::shared_ptr<ZJY::VertexBuffer> SquareVB;
+		ZJY::Ref<ZJY::VertexBuffer> SquareVB;
 		SquareVB.reset(ZJY::VertexBuffer::Creat(squarevertives, sizeof(squarevertives)));
 		SquareVB->SetLayeout({
-			{ZJY::ShaderDataType::Float3,"a_Position"},
-			});
+			{ZJY::ShaderDataType::Float3, "a_Position"},
+			{ZJY::ShaderDataType::Float2, "a_TexCoord"}
+		});
 		m_SquareVA->AddVertexBuffer(SquareVB);
 
 		uint32_t squareindices[6] = { 0,1,2,2,3,0 };
-		std::shared_ptr<ZJY::IndexBuffer> SquareIB;
+		ZJY::Ref<ZJY::IndexBuffer> SquareIB;
 		SquareIB.reset(ZJY::IndexBuffer::Creat(squareindices, sizeof(squarevertives) / sizeof(uint32_t)));
 		m_SquareVA->SetIndexBuffer(SquareIB);
 
@@ -90,6 +97,7 @@ public:
 			layout(location=1) in vec4 a_Color;
 
 			uniform mat4 u_ViewProjuection;
+			uniform mat4 u_Transform;
 
 			out vec3 v_Position;
 			out vec4 v_Color;
@@ -98,7 +106,7 @@ public:
 			{
 				v_Color = a_Color;
 				v_Position = a_Position;
-				gl_Position = u_ViewProjuection * vec4(a_Position, 1.0 );
+				gl_Position = u_ViewProjuection * u_Transform * vec4(a_Position, 1.0 );
 			}
 		)";
 
@@ -116,7 +124,7 @@ public:
 				color = v_Color;
 			}
 		)";
-		m_Shader.reset(new ZJY::Shader(vertexSrc, fragmentSrc));
+		m_Shader.reset(ZJY::Shader::Create(vertexSrc, fragmentSrc));
 
 		std::string SquareSrc = R"(
 			#version 330 core
@@ -124,12 +132,13 @@ public:
 			layout(location=0) in vec3 a_Position;
 
 			uniform mat4 u_ViewProjuection;
+			uniform mat4 u_Transform;
 
 			out vec3 v_Position;
 
 			void main()
 			{
-				gl_Position = u_ViewProjuection * vec4(a_Position, 1.0 );
+				gl_Position = u_ViewProjuection * u_Transform * vec4(a_Position, 1.0 );
 			}
 		)";
 
@@ -137,17 +146,66 @@ public:
 			#version 330 core
 			
 			layout(location=0) out vec4 color;
+			
+			uniform vec3 u_color;
 
 			in vec3 v_Position;
 
 			void main()
 			{
-				color = vec4(0.2,1.0,1.0,1.0);
+				color = vec4(u_color,1.0);
+			}
+		)";
+		m_FlatColorShader.reset(ZJY::Shader::Create(SquareSrc, SquareFSrc));
+
+		std::string TextureShader = R"(
+			#version 330 core
+		
+			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec2 a_TexCoord;
+
+			uniform mat4 u_ViewProjuection;
+			uniform mat4 u_Transform;
+
+			out vec2 v_TexCoord;
+
+			void main()
+			{
+				v_TexCoord = a_TexCoord;
+				gl_Position = u_ViewProjuection * u_Transform * vec4(a_Position, 1.0 );
 			}
 		)";
 
-		m_BlueShader.reset(new ZJY::Shader(SquareSrc, SquareFSrc));//共享指针就不用设置唯一，相当于m_Shader=new std::unique_ptr<Shader>()
+		std::string TextureShaderFSrc = R"(
+			#version 330 core
+			
+			layout(location=0) out vec4 color;
+			
+			uniform sampler2D u_Texture;
+			uniform sampler2D u_Texture1;
+
+			in vec2 v_TexCoord;
+
+			void main()
+			{
+				color = mix(texture(u_Texture, v_TexCoord), texture(u_Texture1, v_TexCoord), 0.2);
+			}
+		)";
+
+		m_TexCoordShader.reset(ZJY::Shader::Create(TextureShader, TextureShaderFSrc));
+		//共享指针就不用设置唯一，相当于m_Shader=new std::unique_ptr<Shader>()
+
+		m_Texture = ZJY::Texture2D::Create("Asset/textures/container.jpg");
+		m_PNGTexture = ZJY::Texture2D::Create("Asset/textures/star.png");
+
+		std::dynamic_pointer_cast<ZJY::OpenGLShader>(m_TexCoordShader)->Bind();
+		std::dynamic_pointer_cast<ZJY::OpenGLShader>(m_TexCoordShader)->UploadUniformInt("u_Texture", 0);//0号插槽
 	}
+
+	/// <summary>
+	/// 设置Delta Time来解决不同帧率限制下的相同帧率
+	/// </summary>
+	/// <param name="ts">Delta Time</param>
 	void OnUpdate(ZJY::Timestep ts) override
 	{
 		//Z_CORE_TRACE("Delta timr:{0}s ({1}ms)", ts.GetSecond(), ts.GetMilliseSecond());
@@ -178,23 +236,64 @@ public:
 			m_CameraRotation += speed * ts;
 		}
 
+		#pragma region 移动物体
+		/*if (ZJY::Input::IsKeyPressed(ZJY::Key::I))
+				{
+					m_SquarePosition.y += m_SquareSpeed * ts;
+				}
+				else if (ZJY::Input::IsKeyPressed(ZJY::Key::K))
+				{
+					m_SquarePosition.y -= m_SquareSpeed * ts;
+				}
+				else if (ZJY::Input::IsKeyPressed(ZJY::Key::J))
+				{
+					m_SquarePosition.x -= m_SquareSpeed * ts;
+				}
+				else if (ZJY::Input::IsKeyPressed(ZJY::Key::L))
+				{
+					m_SquarePosition.x += m_SquareSpeed * ts;
+				}*/
+		#pragma endregion
 
 		ZJY::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 0.1f });
 		ZJY::RenderCommand::Clear();
 
-		ZJY::Renderer::BeginScene(m_Camera);
-
 		m_Camera.SetPosition(m_CameraPosition);
 		m_Camera.SetRotation(m_CameraRotation);
 
-		ZJY::Renderer::Submit(m_BlueShader, m_SquareVA);
-		ZJY::Renderer::Submit(m_Shader, m_VertexArray);
+		ZJY::Renderer::BeginScene(m_Camera);
+
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+
+		std::dynamic_pointer_cast<ZJY::OpenGLShader>(m_FlatColorShader)->Bind();
+		std::dynamic_pointer_cast<ZJY::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3("u_color", m_Color);
+
+		for (int y = 0; y < 10; y++)
+		{
+			for (int x = 0; x < 10; x++)
+			{
+				glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
+				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+				ZJY::Renderer::Submit(m_FlatColorShader, m_SquareVA, transform);
+			}
+		}
+
+		//层级，第一个在后面的层 
+		m_Texture->Bind();
+		ZJY::Renderer::Submit(m_TexCoordShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+
+		m_PNGTexture->Bind();
+		ZJY::Renderer::Submit(m_TexCoordShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+
+		//ZJY::Renderer::Submit(m_Shader, m_VertexArray);
 
 		ZJY::Renderer::EndScene();
 	}
 	virtual void OnImGuiRender() override
 	{
-
+		ImGui::Begin("Shader Setting");
+		ImGui::ColorEdit3("color", glm::value_ptr(m_Color));
+		ImGui::End();
 	}
 	void OnEvent(ZJY::Event& event) override
 	{
@@ -225,17 +324,21 @@ public:
 
 private:
 	//画出一个图形，只需要声明shader和VA，VB和IB在内部实现
-	std::shared_ptr<ZJY::Shader> m_Shader;
-	std::shared_ptr<ZJY::VertexArray> m_VertexArray;
+	ZJY::Ref<ZJY::Shader> m_Shader;
+	ZJY::Ref<ZJY::VertexArray> m_VertexArray;
 
-	std::shared_ptr<ZJY::Shader> m_BlueShader;
-	std::shared_ptr<ZJY::VertexArray> m_SquareVA;
+	ZJY::Ref<ZJY::Shader> m_FlatColorShader,m_TexCoordShader;
+	ZJY::Ref<ZJY::VertexArray> m_SquareVA;
+
+	ZJY::Ref<ZJY::Texture2D> m_Texture, m_PNGTexture;
 
 	ZJY::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;
-	float speed = -1.0f;
+	float speed = 1.0f;
 
 	float m_CameraRotation = 0.0f;
+
+	glm::vec3 m_Color = { 1,1,1 };
 };
 
 class Sandbox :public ZJY::Application

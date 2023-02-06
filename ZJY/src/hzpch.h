@@ -18,6 +18,8 @@
 
 #include <cstdint>
 
+#include "ZJY/Renderer/Texture.h"
+
 #ifdef  Z_PLATFORM_WINDOWS
 	#include<Windows.h>
 #endif //  Z_PLATFORM_WINDOWS

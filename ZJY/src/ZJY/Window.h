@@ -3,6 +3,7 @@
 #include "hzpch.h"
 #include "ZJY/Core.h"
 #include "ZJY/Events/Event.h"
+#include <functional>
 
 namespace ZJY {
 	struct WindowProps

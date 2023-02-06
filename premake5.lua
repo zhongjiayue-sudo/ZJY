@@ -17,6 +17,8 @@ IncludeDir["GLFW"] = "ZJY/vendor/GLFW/include"
 IncludeDir["Glad"] = "ZJY/vendor/Glad/include"
 IncludeDir["ImGui"] = "ZJY/vendor/imgui"
 IncludeDir["glm"] = "ZJY/vendor/glm"
+IncludeDir["stb_image"] = "ZJY/vendor/stb_image"
+
 
 include "ZJY/vendor/GLFW"
 include "ZJY/vendor/Glad"
@@ -41,7 +43,9 @@ project "ZJY"
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
-		"%{prj.name}/vendor/glm/glm/**.inl"
+		"%{prj.name}/vendor/glm/glm/**.inl",
+		"%{prj.name}/vendor/stb_image/**.h",
+		"%{prj.name}/vendor/stb_image/**.cpp"
 	}
 
 	defines
@@ -56,7 +60,8 @@ project "ZJY"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.stb_image}"
 	}
 
 	links

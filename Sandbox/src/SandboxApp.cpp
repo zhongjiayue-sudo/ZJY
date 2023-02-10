@@ -4,7 +4,6 @@
 #include"imgui/imgui.h"
 
 #include"glm/gtc/matrix_transform.hpp"
-
 #include"glm/gtc/type_ptr.hpp"
 
 class ExampleLayer : public ZJY::Layer
@@ -124,7 +123,7 @@ public:
 				color = v_Color;
 			}
 		)";
-		m_Shader.reset(ZJY::Shader::Create(vertexSrc, fragmentSrc));
+		m_Shader = ZJY::Shader::Create("VertexPosColor", vertexSrc, fragmentSrc);
 
 		std::string SquareSrc = R"(
 			#version 330 core
@@ -156,50 +155,15 @@ public:
 				color = vec4(u_color,1.0);
 			}
 		)";
-		m_FlatColorShader.reset(ZJY::Shader::Create(SquareSrc, SquareFSrc));
+		m_FlatColorShader = ZJY::Shader::Create("FlatColor", SquareSrc, SquareFSrc);
 
-		std::string TextureShader = R"(
-			#version 330 core
-		
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec2 a_TexCoord;
-
-			uniform mat4 u_ViewProjuection;
-			uniform mat4 u_Transform;
-
-			out vec2 v_TexCoord;
-
-			void main()
-			{
-				v_TexCoord = a_TexCoord;
-				gl_Position = u_ViewProjuection * u_Transform * vec4(a_Position, 1.0 );
-			}
-		)";
-
-		std::string TextureShaderFSrc = R"(
-			#version 330 core
-			
-			layout(location=0) out vec4 color;
-			
-			uniform sampler2D u_Texture;
-			uniform sampler2D u_Texture1;
-
-			in vec2 v_TexCoord;
-
-			void main()
-			{
-				color = mix(texture(u_Texture, v_TexCoord), texture(u_Texture1, v_TexCoord), 0.2);
-			}
-		)";
-
-		m_TexCoordShader.reset(ZJY::Shader::Create(TextureShader, TextureShaderFSrc));
-		//共享指针就不用设置唯一，相当于m_Shader=new std::unique_ptr<Shader>()
+		auto TexCoordShader = m_ShaderLibrary.Load("Asset/shaders/Texture.glsl");
 
 		m_Texture = ZJY::Texture2D::Create("Asset/textures/container.jpg");
 		m_PNGTexture = ZJY::Texture2D::Create("Asset/textures/star.png");
 
-		std::dynamic_pointer_cast<ZJY::OpenGLShader>(m_TexCoordShader)->Bind();
-		std::dynamic_pointer_cast<ZJY::OpenGLShader>(m_TexCoordShader)->UploadUniformInt("u_Texture", 0);//0号插槽
+		std::dynamic_pointer_cast<ZJY::OpenGLShader>(TexCoordShader)->Bind();
+		std::dynamic_pointer_cast<ZJY::OpenGLShader>(TexCoordShader)->UploadUniformInt("u_Texture", 0);//0号插槽
 	}
 
 	/// <summary>
@@ -278,12 +242,14 @@ public:
 			}
 		}
 
+		auto TexCoordShader = m_ShaderLibrary.Get("Texture");
+
 		//层级，第一个在后面的层 
 		m_Texture->Bind();
-		ZJY::Renderer::Submit(m_TexCoordShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		ZJY::Renderer::Submit(TexCoordShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 		m_PNGTexture->Bind();
-		ZJY::Renderer::Submit(m_TexCoordShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		ZJY::Renderer::Submit(TexCoordShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 		//ZJY::Renderer::Submit(m_Shader, m_VertexArray);
 
@@ -323,11 +289,12 @@ public:
 
 
 private:
+	ZJY::ShaderLibrary m_ShaderLibrary;
 	//画出一个图形，只需要声明shader和VA，VB和IB在内部实现
 	ZJY::Ref<ZJY::Shader> m_Shader;
 	ZJY::Ref<ZJY::VertexArray> m_VertexArray;
 
-	ZJY::Ref<ZJY::Shader> m_FlatColorShader,m_TexCoordShader;
+	ZJY::Ref<ZJY::Shader> m_FlatColorShader;
 	ZJY::Ref<ZJY::VertexArray> m_SquareVA;
 
 	ZJY::Ref<ZJY::Texture2D> m_Texture, m_PNGTexture;

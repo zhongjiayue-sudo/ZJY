@@ -13,6 +13,7 @@
 #include "ZJY/Core/MouseCodes.h"
 
 #include "ZJY/ImGui/ImGuiLayer.h"
+#include "ZJY/OrthographicCameraController.h"
 
 //------------------Renderer-------------
 #include"ZJY/Renderer/Renderer.h"

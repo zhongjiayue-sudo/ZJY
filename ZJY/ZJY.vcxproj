@@ -164,6 +164,7 @@
     <ClInclude Include="src\ZJY\Events\KeyEvent.h" />
     <ClInclude Include="src\ZJY\Events\MouseEvent.h" />
     <ClInclude Include="src\ZJY\ImGui\ImGuiLayer.h" />
+    <ClInclude Include="src\ZJY\OrthographicCameraController.h" />
     <ClInclude Include="src\ZJY\Renderer\Buffer.h" />
     <ClInclude Include="src\ZJY\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\ZJY\Renderer\Material.h" />
@@ -609,6 +610,7 @@
     <ClCompile Include="src\ZJY\Core\Log.cpp" />
     <ClCompile Include="src\ZJY\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\ZJY\ImGui\ImGuiLayer.cpp" />
+    <ClCompile Include="src\ZJY\OrthographicCameraController.cpp" />
     <ClCompile Include="src\ZJY\Renderer\Buffer.cpp" />
     <ClCompile Include="src\ZJY\Renderer\Material.cpp" />
     <ClCompile Include="src\ZJY\Renderer\OrthographicCamera.cpp" />

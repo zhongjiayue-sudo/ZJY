@@ -55,6 +55,9 @@ namespace ZJY {
 		}
 	};
 
+	/// <summary>
+	/// 事件调度器，绑定两个关联事件
+	/// </summary>
 	class EventDispatcher
 	{
 	public:

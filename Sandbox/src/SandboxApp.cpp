@@ -9,7 +9,8 @@
 class ExampleLayer : public ZJY::Layer
 {
 public:
-	ExampleLayer() :Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.0f)
+	ExampleLayer() 
+		:Layer("Example"), m_CameraController( 1280.0f / 720.0f ,true)
 	{
 		/*
 		#############################################################################
@@ -172,34 +173,9 @@ public:
 	/// <param name="ts">Delta Time</param>
 	void OnUpdate(ZJY::Timestep ts) override
 	{
+		//Update
+		m_CameraController.OnUpdate(ts);
 		//Z_CORE_TRACE("Delta timr:{0}s ({1}ms)", ts.GetSecond(), ts.GetMilliseSecond());
-
-		if (ZJY::Input::IsKeyPressed(ZJY::Key::A))
-		{
-			m_CameraPosition.x -= speed * ts;
-		}
-		else if (ZJY::Input::IsKeyPressed(ZJY::Key::D))
-		{
-			m_CameraPosition.x += speed * ts;
-		}
-		else if (ZJY::Input::IsKeyPressed(ZJY::Key::W))
-		{
-			m_CameraPosition.y += speed * ts;
-		}
-		else if (ZJY::Input::IsKeyPressed(ZJY::Key::S))
-		{
-			m_CameraPosition.y -= speed * ts;
-		}
-
-		if (ZJY::Input::IsKeyPressed(ZJY::Key::Q))
-		{
-			m_CameraRotation -= speed * ts;
-		}
-		else if (ZJY::Input::IsKeyPressed(ZJY::Key::E))
-		{
-			m_CameraRotation += speed * ts;
-		}
-
 		#pragma region 移动物体
 		/*if (ZJY::Input::IsKeyPressed(ZJY::Key::I))
 				{
@@ -219,13 +195,11 @@ public:
 				}*/
 		#pragma endregion
 
+		//Render
 		ZJY::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 0.1f });
 		ZJY::RenderCommand::Clear();
 
-		m_Camera.SetPosition(m_CameraPosition);
-		m_Camera.SetRotation(m_CameraRotation);
-
-		ZJY::Renderer::BeginScene(m_Camera);
+		ZJY::Renderer::BeginScene(m_CameraController.GetCamera());
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
@@ -261,10 +235,9 @@ public:
 		ImGui::ColorEdit3("color", glm::value_ptr(m_Color));
 		ImGui::End();
 	}
-	void OnEvent(ZJY::Event& event) override
+	void OnEvent(ZJY::Event& e) override
 	{
-		//ZJY::EventDispatcher dispatcher(event);//事件调度
-		//dispatcher.Dispatch<ZJY::KeyPressedEvent>(Z_BIND_EVENT_FN(ExampleLayer::OnKeyPressedEvent));
+		m_CameraController.OnEvent(e);
 	}
 	/*bool OnKeyPressedEvent(ZJY::KeyPressedEvent& event)
 	{
@@ -287,7 +260,6 @@ public:
 		return false;
 	}*/
 
-
 private:
 	ZJY::ShaderLibrary m_ShaderLibrary;
 	//画出一个图形，只需要声明shader和VA，VB和IB在内部实现
@@ -299,11 +271,7 @@ private:
 
 	ZJY::Ref<ZJY::Texture2D> m_Texture, m_PNGTexture;
 
-	ZJY::OrthographicCamera m_Camera;
-	glm::vec3 m_CameraPosition;
-	float speed = 1.0f;
-
-	float m_CameraRotation = 0.0f;
+	ZJY::OrthographicCameraController m_CameraController;
 
 	glm::vec3 m_Color = { 1,1,1 };
 };
